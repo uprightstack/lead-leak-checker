@@ -13,23 +13,35 @@ function ring(score) {
     <span class="num" aria-hidden="true">${score}</span></div>`;
 }
 
+const STATUS_LABEL = { pass: "Passed", warn: "Needs attention", fail: "Needs attention", skip: "Not measured" };
+
+const CHEV = '<svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>';
+
+const row = (c) => `<li><details><summary>
+  <span class="dot ${c.status}" aria-hidden="true">${MARK[c.status]}</span>
+  <span class="t"><span class="sr">${STATUS_LABEL[c.status]}: </span><span class="title">${esc(c.title)}</span><br><span class="detail">${esc(c.detail)}</span></span>
+  ${c.why ? CHEV : ""}
+</summary>${c.why ? `<p class="why">${esc(c.why)}</p>` : ""}</details></li>`;
+
 function render(scan) {
   const checks = buildChecks(scan);
   const score = scoreChecks(checks);
-  const leaks = checks.filter((c) => c.status === "fail" || c.status === "warn");
+  // Problems first (failures, then warnings), then what is fine, then what could not be measured.
+  const attention = checks.filter((c) => c.status === "fail").concat(checks.filter((c) => c.status === "warn"));
+  const good = checks.filter((c) => c.status === "pass");
+  const skipped = checks.filter((c) => c.status === "skip");
+  const measured = checks.length - skipped.length;
+  const summary = attention.length
+    ? `${attention.length} of ${measured} checks need attention`
+    : `All ${measured} checks look good`;
+  const rest = good.concat(skipped);
+  const restTitle = `Looking good (${good.length})${skipped.length ? ` · ${skipped.length} not measured` : ""}`;
 
   app.innerHTML = `
-    <div class="score">${ring(score)}<div><p class="host">${esc(scan.host)}</p><p class="verdict">${verdict(score)}</p></div><button class="copy" id="copy" type="button">Copy</button></div>
-    <ul class="checks">${checks
-      .map(
-        (c) => `<li><details><summary>
-          <span class="dot ${c.status}" aria-hidden="true">${MARK[c.status]}</span>
-          <span class="t"><span class="title">${esc(c.title)}</span><br><span class="detail">${esc(c.detail)}</span></span>
-          ${c.why ? '<svg class="chev" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>' : ""}
-        </summary>${c.why ? `<p class="why">${esc(c.why)}</p>` : ""}</details></li>`
-      )
-      .join("")}</ul>
-    <p class="note">A quick read of what this page shows. It can't see phone systems, inboxes or follow-up after a lead comes in.</p>
+    <div class="score">${ring(score)}<div class="info"><div class="meta"><p class="host">${esc(scan.host)}</p><button class="copy" id="copy" type="button">Copy results</button></div><p class="verdict">${verdict(score)}</p><p class="count">${summary}</p></div></div>
+    ${attention.length ? `<ul class="checks">${attention.map(row).join("")}</ul>` : ""}
+    ${rest.length ? `<details class="group"${attention.length ? "" : " open"}><summary>${restTitle}${CHEV}</summary><ul class="checks inner">${rest.map(row).join("")}</ul></details>` : ""}
+    <p class="note">Checks this page only: try a business's homepage for the clearest picture. It can't see phone systems, inboxes or follow-up after a lead comes in.</p>
     <div class="sticky">
       <a class="btn btn-primary" id="audit" href="${AUDIT_URL}" target="_blank" rel="noopener">Get my free Lead Leak Audit</a>
       <p class="assure"><span>Free</span> · <span>30 minutes</span> · <span>Written Leak Map in 48 hours</span> · <span>No obligation</span></p>
@@ -37,8 +49,8 @@ function render(scan) {
 
   document.getElementById("copy").addEventListener("click", async (e) => {
     const lines = [
-      `Lead Leak Checker: ${scan.host} scored ${score}/100 (${verdict(score).toLowerCase()}).`,
-      ...checks.filter((c) => c.status !== "skip").map((c) => `${MARK[c.status]} ${c.title}: ${c.detail}`),
+      `Lead Leak Checker: ${scan.host} scored ${score}/100 (${verdict(score).toLowerCase()}). ${summary}.`,
+      ...attention.concat(good).map((c) => `${MARK[c.status]} ${c.title}: ${c.detail}`),
       "",
       "Check your own site: https://uprightstack.com/audit",
     ];
@@ -49,24 +61,24 @@ function render(scan) {
     } catch {
       btn.textContent = "Couldn't copy";
     }
-    setTimeout(() => (btn.textContent = "Copy"), 1800);
+    setTimeout(() => (btn.textContent = "Copy results"), 1800);
   });
 }
 
-function message(text) {
-  app.innerHTML = `<p class="state">${esc(text)}</p>`;
+function message(title, hint) {
+  app.innerHTML = `<div class="state"><span class="state-icon" aria-hidden="true">i</span><p class="state-title">${esc(title)}</p>${hint ? `<p class="state-hint">${esc(hint)}</p>` : ""}</div>`;
 }
 
 (async () => {
   try {
     const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
     if (!tab || !/^https?:/.test(tab.url || "")) {
-      return message("Open a business website, then click the icon again.");
+      return message("Open a business website first", "Then click the icon again to check it.");
     }
     const [res] = await chrome.scripting.executeScript({ target: { tabId: tab.id }, func: scanPage });
-    if (!res || !res.result) return message("Couldn't read this page.");
+    if (!res || !res.result) return message("Couldn't read this page", "Reload it and try again.");
     render(res.result);
   } catch (err) {
-    message("Couldn't check this page. Some pages, like the Chrome Web Store, block extensions.");
+    message("Couldn't check this page", "Some pages, like the Chrome Web Store, block extensions. Try a business website.");
   }
 })();

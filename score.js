@@ -2,7 +2,7 @@
 const PASS = "pass", WARN = "warn", FAIL = "fail", SKIP = "skip";
 
 function buildChecks(s) {
-  const secs = (ms) => (ms / 1000).toFixed(1) + "s";
+  const secs = (ms) => (ms < 100 ? "under 0.1s" : (ms / 1000).toFixed(1) + "s");
   const checks = [];
 
   // 1. Contact form

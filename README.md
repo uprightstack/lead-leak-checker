@@ -6,7 +6,7 @@ Built by [Upright Stack](https://uprightstack.com), a CRM automation agency for 
 
 ## What it checks
 
-Each check says why it matters, in plain English. You can copy the result to share it with a colleague, a client or the business owner.
+The popup lists the problems first, with a count (for example "6 of 8 checks need attention"), and tucks what is fine under "Looking good". Each check says why it matters, in plain English. You can copy the results to share them with a colleague, a client or the business owner.
 
 | Check | Weight | What counts as a pass |
 | --- | --- | --- |
