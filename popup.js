@@ -1,5 +1,5 @@
 const app = document.getElementById("app");
-const AUDIT_URL = "https://uprightstack.com/audit?utm_source=chrome-extension&utm_medium=extension&utm_campaign=lead-leak-checker";
+const AUDIT_URL = "https://uprightstack.com/audit?utm_source=chrome-extension&utm_medium=extension&utm_campaign=site-leak-score";
 const MARK = { pass: "✓", warn: "!", fail: "×", skip: "–" };
 
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -49,7 +49,7 @@ function render(scan) {
 
   document.getElementById("copy").addEventListener("click", async (e) => {
     const lines = [
-      `Lead Leak Checker: ${scan.host} scored ${score}/100 (${verdict(score).toLowerCase()}). ${summary}.`,
+      `Site Leak Score: ${scan.host} scored ${score}/100 (${verdict(score).toLowerCase()}). ${summary}.`,
       ...attention.concat(good).map((c) => `${MARK[c.status]} ${c.title}: ${c.detail}`),
       "",
       "Check your own site: https://uprightstack.com/audit",

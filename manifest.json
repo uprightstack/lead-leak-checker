@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "Lead Leak Checker by Upright Stack",
-  "short_name": "Lead Leak Checker",
+  "name": "Site Leak Score by Upright Stack",
+  "short_name": "Site Leak Score",
   "version": "1.0.0",
   "description": "Check any service business website for lead leaks: form, click-to-call, chat, booking, call to action and speed. Free and private.",
   "homepage_url": "https://uprightstack.com",

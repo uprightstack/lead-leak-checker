@@ -1,4 +1,4 @@
-# Lead Leak Checker
+# Site Leak Score
 
 A free Chrome extension that checks a service business website for lead leaks. Open any site, click the icon, and get a score out of 100 with a short list of what is working and what is not.
 
@@ -35,7 +35,7 @@ The Chrome Web Store listing is coming soon. Until then, you can load it yoursel
 1. Download or clone this repository.
 2. Open `chrome://extensions` in Chrome and turn on **Developer mode**.
 3. Click **Load unpacked** and choose this folder.
-4. Open any website and click the Lead Leak Checker icon.
+4. Open any website and click the Site Leak Score icon.
 
 ## How it works
 
