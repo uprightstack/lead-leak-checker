@@ -1,0 +1,76 @@
+@font-face { font-family: "Geist"; src: url("fonts/geist.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+
+:root {
+  --ink: #0f3b45;
+  --accent: #f2a65a;
+  --accent-strong: #c4661a;
+  --bg: #ffffff;
+  --bg-2: #f3f6f6;
+  --muted: #4d6368;
+  --faint: #5a6f74;
+  --hairline: #e3e9e9;
+  --line-strong: #c9d4d5;
+  --good: #1f7a4d;
+  --good-bg: #e4f5ec;
+  --warn-text: #7a5a00;
+  --warn-bg: #fdf3d6;
+  --danger: #a8281f;
+  --danger-bg: #fdecea;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; width: 380px; font: 400 14px/1.5 "Geist", system-ui, sans-serif; color: var(--ink); background: var(--bg); }
+p { margin: 0; }
+
+.top { display: flex; align-items: center; gap: 10px; padding: 14px 18px; border-bottom: 1px solid var(--hairline); }
+.top .name { font-weight: 500; font-size: 15px; letter-spacing: -0.01em; }
+.top .by { font-size: 12px; color: var(--faint); }
+
+main { padding: 18px 18px 0; }
+.state { color: var(--muted); padding: 24px 0; text-align: center; }
+
+.score { display: flex; align-items: center; gap: 16px; padding: 16px; background: var(--bg-2); }
+.ring { position: relative; width: 76px; height: 76px; flex: none; }
+.ring svg { display: block; transform: rotate(-90deg); }
+.ring .num { position: absolute; inset: 0; display: grid; place-items: center; font-size: 24px; font-weight: 500; letter-spacing: -0.03em; }
+.score > div:nth-child(2) { flex: 1; min-width: 0; }
+.score .host { font-size: 12px; color: var(--faint); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.score .verdict { font-size: 17px; font-weight: 500; letter-spacing: -0.02em; line-height: 1.25; margin-top: 2px; }
+
+.checks { list-style: none; margin: 14px 0 0; padding: 0; border: 1px solid var(--line-strong); }
+.checks li { border-top: 1px solid var(--hairline); }
+.checks li:first-child { border-top: 0; }
+.checks details { padding: 0; }
+.checks summary { display: flex; align-items: center; gap: 10px; padding: 10px 12px; cursor: pointer; list-style: none; }
+.checks summary::-webkit-details-marker { display: none; }
+.checks summary:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.checks .t { flex: 1; min-width: 0; }
+.checks .title { font-weight: 500; font-size: 13.5px; }
+.checks .detail { font-size: 12.5px; color: var(--muted); }
+.checks .why { padding: 0 12px 12px 42px; font-size: 12.5px; color: var(--muted); }
+.chev { width: 14px; height: 14px; flex: none; color: var(--faint); transition: transform 160ms; }
+details[open] .chev { transform: rotate(180deg); }
+
+.dot { width: 20px; height: 20px; flex: none; display: grid; place-items: center; font-size: 12px; font-weight: 600; border-radius: 999px; }
+.dot.pass { background: var(--good-bg); color: var(--good); }
+.dot.warn { background: var(--warn-bg); color: var(--warn-text); }
+.dot.fail { background: var(--danger-bg); color: var(--danger); }
+.dot.skip { background: var(--bg-2); color: var(--faint); }
+
+.note { margin: 12px 0 14px; font-size: 12px; color: var(--faint); }
+
+.sticky { position: sticky; bottom: 0; display: grid; gap: 8px; margin: 0 -18px; padding: 12px 18px 14px; background: var(--bg); border-top: 1px solid var(--hairline); }
+.copy { align-self: flex-start; padding: 5px 10px; font: 500 12px/1.2 "Geist", system-ui, sans-serif; color: var(--ink); background: #fff; border: 1px solid var(--line-strong); border-radius: 6px; cursor: pointer; }
+.copy:hover { background: var(--bg-2); }
+.copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn { display: block; width: 100%; padding: 11px 14px; border-radius: 6px; font: 500 14px/1.2 "Geist", system-ui, sans-serif; text-align: center; text-decoration: none; cursor: pointer; border: 1px solid transparent; }
+.btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn-primary { background: var(--ink); color: #fff; }
+.btn-primary:hover { background: #1a5260; }
+.btn-ghost { background: #fff; color: var(--ink); border-color: var(--line-strong); }
+.btn-ghost:hover { background: var(--bg-2); }
+.assure { font-size: 12px; color: var(--faint); text-align: center; text-wrap: balance; }
+.assure span { white-space: nowrap; }
+
+
+@media (prefers-reduced-motion: reduce) { .chev { transition: none; } }
