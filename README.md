@@ -30,7 +30,7 @@ The score is the points earned out of the points possible. Checks that cannot be
 
 ## Install
 
-The Chrome Web Store listing is coming soon. Until then, you can load it yourself:
+**[Install from the Chrome Web Store](https://chromewebstore.google.com/detail/site-leak-score-by-uprigh/dlmckldjbdjofmodmokojnchnaimnkcc).** Or, to load the source yourself:
 
 1. Download or clone this repository.
 2. Open `chrome://extensions` in Chrome and turn on **Developer mode**.
